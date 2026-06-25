@@ -222,6 +222,11 @@
       #metodologia .card-02 { order: 2 !important; height: 192px !important; padding: 32px 20px !important; border-radius: 10px !important; }
       #metodologia .card-03 { order: 3 !important; height: 256px !important; border-radius: 10px !important; }
       #metodologia .card-04 { order: 4 !important; height: 256px !important; border-radius: 10px !important; }
+      /* Mobile PNGs carry a thin transparent edge; scale the image up from its
+         center so the card's overflow:hidden clips it evenly instead of showing
+         a white sliver at any edge. */
+      #metodologia .card-03 img,
+      #metodologia .card-04 img { transform: scale(1.06) !important; }
       #metodologia .card-01 p:nth-child(1),
       #metodologia .card-02 p:nth-child(1) { font-size: 32px !important; }
       #metodologia .card-01 p:nth-child(2) { font-size: 22px !important; margin-bottom: 4px !important; }
@@ -648,7 +653,10 @@
         <div style="display: flex; flex-direction: column; gap: 16px; padding-bottom: 48px;">
           <!-- Card 03 (image with overlay) -->
           <div class="card-03" style="height: 256px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.05); flex-shrink: 0;">
-            <img src="assets/images/process-03.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom;">
+            <picture>
+              <source media="(max-width: 767px)" srcset="assets/images/process-03-mobile.png">
+              <img src="assets/images/process-03.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom;">
+            </picture>
             <div style="position: absolute; bottom: 147px; left: 20px; right: 20px;">
               <p style="font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 32px; line-height: 1.2; color: #001e40;">03</p>
               <p style="font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 23px; line-height: 1.2; color: #001e40;">Carga progresiva</p>
@@ -675,7 +683,10 @@
           </div>
           <!-- Card 04 (image with overlay) -->
           <div class="card-04" style="height: 256px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.05); flex-shrink: 0;">
-            <img src="assets/images/process-04.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom;">
+            <picture>
+              <source media="(max-width: 767px)" srcset="assets/images/process-04-mobile.png">
+              <img src="assets/images/process-04.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: bottom;">
+            </picture>
             <div style="position: absolute; bottom: 147px; left: 20px; right: 20px;">
               <p style="font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 32px; line-height: 1.2; color: #001e40;">04</p>
               <p style="font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 23px; line-height: 1.2; color: #001e40;">Vuelta al movimiento</p>
@@ -1139,17 +1150,43 @@ Sin dudas Axis es la mejor clínica para tu recuperación, empeza ya tu proceso 
       overlay.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', shut); });
     })();
 
-    /* Testimonials carousel: arrows scroll the track by one card */
-    function scrollTestimonials(dir) {
+    /* Testimonials carousel: arrows scroll one card, clamped to the ends */
+    (function() {
       var track = document.getElementById('testimonialTrack');
       if (!track) return;
-      var card = track.querySelector('.testimonial-card');
-      var styles = getComputedStyle(track);
-      var gap = parseFloat(styles.columnGap || styles.gap) || 0;
-      // Scroll by the actual rendered card width (3-up on desktop, full-width on mobile)
-      var step = card ? card.getBoundingClientRect().width + gap : track.clientWidth;
-      track.scrollBy({ left: dir * step, behavior: 'smooth' });
-    }
+      var leftBtn = document.querySelector('#testimonios .carousel-arrow-left');
+      var rightBtn = document.querySelector('#testimonios .carousel-arrow-right');
+
+      function step() {
+        var card = track.querySelector('.testimonial-card');
+        var styles = getComputedStyle(track);
+        var gap = parseFloat(styles.columnGap || styles.gap) || 0;
+        // One rendered card + gap (3-up on desktop, full-width on mobile)
+        return card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+      }
+      function maxScroll() { return track.scrollWidth - track.clientWidth; }
+
+      // Exposed globally so the inline onclick handlers can call it.
+      window.scrollTestimonials = function(dir) {
+        var target = track.scrollLeft + dir * step();
+        // Clamp so repeated taps never run past the first/last card into empty space.
+        target = Math.max(0, Math.min(target, maxScroll()));
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      };
+
+      function updateArrows() {
+        var max = maxScroll();
+        // Tolerance covers the track's edge padding, where scrollLeft rests a few px in.
+        var tol = 12;
+        var atStart = track.scrollLeft <= tol;
+        var atEnd = track.scrollLeft >= max - tol;
+        if (leftBtn) { leftBtn.style.opacity = atStart ? '0.35' : '1'; leftBtn.style.pointerEvents = atStart ? 'none' : 'auto'; }
+        if (rightBtn) { rightBtn.style.opacity = atEnd ? '0.35' : '1'; rightBtn.style.pointerEvents = atEnd ? 'none' : 'auto'; }
+      }
+      track.addEventListener('scroll', updateArrows, { passive: true });
+      window.addEventListener('resize', updateArrows);
+      updateArrows();
+    })();
 
     /* Scroll reveal: fade + slide up sections as they enter the viewport */
     (function() {
