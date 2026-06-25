@@ -40,6 +40,51 @@
                   top 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
+    /* === TESTIMONIALS CAROUSEL === */
+    .testimonial-carousel { position: relative; }
+    .testimonial-track {
+      display: flex;
+      gap: 32px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 8px 4px 14px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .testimonial-track::-webkit-scrollbar { display: none; }
+    .testimonial-card {
+      flex: 0 0 calc((100% - 64px) / 3);
+      scroll-snap-align: start;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 0;
+      background: #f5cf3d;
+      color: #001e40;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px -6px rgba(0,30,64,0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+    }
+    .carousel-arrow svg { width: 22px; height: 22px; }
+    .carousel-arrow-left { left: -20px; }
+    .carousel-arrow-right { right: -20px; }
+    @media (hover: hover) {
+      .carousel-arrow:hover {
+        transform: translateY(-50%) scale(1.08);
+        box-shadow: 0 12px 28px -6px rgba(0,30,64,0.32);
+      }
+    }
+
     @media (max-width: 767px) {
       html { scroll-padding-top: 80px; }
       /* === NAVBAR === */
@@ -217,10 +262,14 @@
       #testimonios > div > div:first-child > p { font-size: 20px !important; }
       #testimonios > div > div:first-child > div { width: 85px !important; height: 3px !important; margin-bottom: 22px !important; }
       #testimonios > div > div:first-child h2 { font-size: 38px !important; text-align: left !important; letter-spacing: -0.96px !important; line-height: 1.15 !important; }
-      #testimonios > div > div:last-child { grid-template-columns: 1fr !important; gap: 16px !important; }
-      #testimonios > div > div:last-child > div { padding: 24px 32px !important; border-radius: 10px !important; }
-      #testimonios > div > div:last-child > div > div:first-child { font-size: 72px !important; margin-bottom: 8px !important; }
-      #testimonios > div > div:last-child > div p { font-size: 15px !important; line-height: 1.55 !important; }
+      #testimonios .testimonial-carousel { padding-bottom: 68px !important; }
+      #testimonios .testimonial-track { gap: 16px !important; }
+      #testimonios .testimonial-card { flex: 0 0 100% !important; padding: 24px 32px !important; border-radius: 10px !important; }
+      #testimonios .testimonial-card > div:first-child { font-size: 72px !important; margin-bottom: 8px !important; }
+      #testimonios .testimonial-card p { font-size: 15px !important; line-height: 1.55 !important; }
+      #testimonios .carousel-arrow { display: flex !important; top: auto !important; bottom: 0 !important; transform: none !important; width: 48px !important; height: 48px !important; }
+      #testimonios .carousel-arrow-left { left: calc(50% - 56px) !important; right: auto !important; }
+      #testimonios .carousel-arrow-right { right: calc(50% - 56px) !important; left: auto !important; }
 
       /* === HORARIOS === */
       #horarios { padding: 56px 0 !important; }
@@ -315,7 +364,7 @@
       /* --- Hover lift: cards (service, team, testimonial, contact) --- */
       #servicios > div > div:last-child > div,
       #equipo .team-card,
-      #testimonios > div > div:last-child > div,
+      #testimonios .testimonial-card,
       #contacto a {
         transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
                     box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -323,7 +372,7 @@
       @media (hover: hover) {
         #servicios > div > div:last-child > div:hover,
         #equipo .team-card:hover,
-        #testimonios > div > div:last-child > div:hover,
+        #testimonios .testimonial-card:hover,
         #contacto a:hover {
           transform: translateY(-8px);
           box-shadow: 0 24px 56px -16px rgba(0,30,64,0.22);
@@ -706,6 +755,7 @@
           </div>
         </a>
         <!-- Magdalena -->
+          <a href="https://uy.linkedin.com/in/magdalena-acquistapace-peroni">
         <div class="team-card" style="background: #fff; border-radius: 20px; padding: 32px; display: flex; gap: 32px; align-items: center; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
           <div style="width: 192px; height: 192px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1); overflow: hidden; flex-shrink: 0;">
             <img src="assets/images/magdalena.jpg" alt="Lic. Magdalena Acquistapace" style="width: 146.38%; height: 183.51%; object-fit: cover; margin-left: -16.92%; margin-top: -46.4%; max-width: none;">
@@ -715,6 +765,7 @@
             <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #24657e; text-transform: uppercase; letter-spacing: 0.5px;">LIC. EN FISIOTERAPIA<br>LIC. EN EDUCACIÓN FÍSICA</p>
           </div>
         </div>
+        </a>
 
       </div>
     </div>
@@ -728,46 +779,89 @@
         <div class="accent-underline" style="height: 3px; width: 96px; background: #f5cf3d; margin-top: 8px; margin-bottom: 20px;"></div>
         <h2 style="font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 48px; line-height: 1.2; color: #001e40; letter-spacing: -0.96px; text-align: center;">Lo que dicen nuestros pacientes</h2>
       </div>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
+      <div class="testimonial-carousel">
 
-        <!-- Testimonial 1 -->
-        <div style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
-          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
-          <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"</p>
-          <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
-            <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
-            <div>
-              <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Nombre Apellido</p>
-              <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+        <!-- Left arrow -->
+        <button type="button" class="carousel-arrow carousel-arrow-left" aria-label="Testimonios anteriores" onclick="scrollTestimonials(-1)">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="testimonial-track" id="testimonialTrack">
+
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card" style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
+            <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Excelente clínica de rehabilitación. Instalaciones modernas, un ambiente muy agradable y un personal altamente capacitado. En AXIS se nota que se preocupan de verdad por la evolución del paciente. Mi mejoría ha sido notable en pocas semanas. ¡100% recomendados!"</p>
+            <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
+              <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <div>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Rafael</p>
+                <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Testimonial 2 -->
-        <div style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
-          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
-          <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco"</p>
-          <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
-            <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
-            <div>
-              <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Nombre Apellido</p>
-              <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card" style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
+            <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Excelente experiencia! AXIS cuenta con un servicio de primer nivel, el equipo de profesionales hacen realmente la diferencia…empáticos, dando siempre lo mejor y conectando con las necesidades de cada uno de quienes tenemos la suerte de haberlos conocido. Hoy voy a entrenar y fortalecer, los avances en la recuperación y mejora en general han sido notorios. Los recomiendo 100%!!!!"</p>
+            <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
+              <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <div>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Gabriela</p>
+                <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Testimonial 3 -->
-        <div style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
-          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
-          <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</p>
-          <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
-            <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
-            <div>
-              <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Nombre Apellido</p>
-              <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card" style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
+            <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Mi experiencia en Axis es  excepcional! La profesionalidad y empatía de los fisioterapeutas me ha permitido lograr una excelente evolución de mi lesión.
+El proceso de  rehabilitación me ayudó a mejorar la movilidad y eliminar el dolor, lo que hoy me permite entrenar en la clínica bajo la
+supervisión de quienes me ayudaron en mi recuperación."</p>
+            <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
+              <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <div>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Verónica</p>
+                <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+              </div>
             </div>
           </div>
+
+          <!-- Testimonial 4 — TODO: replace placeholder text and name with the real testimonial -->
+          <div class="testimonial-card" style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
+            <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">La mejor decisión para mi recuperación. Después de una rotura de ligamentos cruzados, ponerme en manos de AXIS marcó la diferencia tanto en el pre como el post-operatorio. Son un equipo de profesionales empáticos, rigurosos y muy comprometidos con el paciente. El progreso en mi fuerza y estabilidad ha sido notorios al punto que hoy recuperé mi vida deportiva. Si buscas una fisioterapia de calidad y resultados reales, este es el lugar."</p>
+            <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
+              <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <div>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Elvis</p>
+                <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 5 — TODO: replace placeholder text and name with the real testimonial -->
+          <div class="testimonial-card" style="background: #f7f9fb; border: 1px solid rgba(195,198,209,0.3); border-radius: 20px; padding: 40px 41px; display: flex; flex-direction: column; box-shadow: 0 8px 40px -10px rgba(0,30,64,0.05);">
+            <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 72px; color: #f5cf3d; line-height: 0.6; margin-bottom: 18px;">"</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-style: italic; font-size: 16px; line-height: 1.6; color: #43474f; flex: 1; margin-bottom: 22px;">Luego de mi lesión de LCA tomé la decisión de ir a Axis para mi pre y post operatorio y fue lo mejor que pude haber hecho! Magdalena y Sebastian hicieron que disfrutara de mi recuperación, porque más allá de que son excelente profesionales, son mejores personas.
+Sin dudas Axis es la mejor clínica para tu recuperación, empeza ya tu proceso de recuperación!"</p>
+            <div style="border-top: 1px solid rgba(21,41,90,0.12); padding-top: 7px; display: flex; gap: 12px; align-items: center;">
+              <img src="assets/icons/User_icon.svg" alt="" style="width: 36px; height: 36px; flex-shrink: 0;">
+              <div>
+                <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 600; font-size: 14px; color: #001e40;">Nicolás</p>
+                <p style="font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(21,41,90,0.62); margin-top: 2px;">Paciente de Fisioterapia</p>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        <!-- Right arrow -->
+        <button type="button" class="carousel-arrow carousel-arrow-right" aria-label="Testimonios siguientes" onclick="scrollTestimonials(1)">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
 
       </div>
     </div>
@@ -842,6 +936,12 @@
                     <span style="font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 11px; color: #15295a; text-align: center; line-height: 1.3;">08:00 - 12:00</span>
                   </div>
                 </div>
+                <!-- Lunes: 19:00-20:00 -->
+                <div style="grid-column: 2; grid-row: 6; padding: 22px 4px 2px;">
+                  <div style="background: rgba(245,207,61,0.5); border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 11px; color: #15295a; text-align: center; line-height: 1.3;">19:00 - 20:00</span>
+                  </div>
+                </div>
 
                 <!-- Martes: 08:00-12:00 -->
                 <div style="grid-column: 3; grid-row: 1 / 3; padding: 2px 4px;">
@@ -860,6 +960,12 @@
                 <div style="grid-column: 4; grid-row: 1 / 3; padding: 2px 4px;">
                   <div style="background: rgba(245,207,61,0.5); border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center;">
                     <span style="font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 11px; color: #15295a; text-align: center; line-height: 1.3;">08:00 - 12:00</span>
+                  </div>
+                </div>
+                <!-- Miércoles: 19:00-20:00 -->
+                <div style="grid-column: 4; grid-row: 6; padding: 22px 4px 2px;">
+                  <div style="background: rgba(245,207,61,0.5); border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 11px; color: #15295a; text-align: center; line-height: 1.3;">19:00 - 20:00</span>
                   </div>
                 </div>
 
@@ -904,9 +1010,9 @@
 
         <!-- Mobile schedule list (shown only at <768px) -->
         <div class="mob-schedule mob-only">
-          <div class="row"><span class="day">Lunes</span><span class="hours">08:00 - 12:00</span></div>
+          <div class="row"><span class="day">Lunes</span><span class="hours">08:00 - 12:00 | 19:00 - 20:00</span></div>
           <div class="row"><span class="day">Martes</span><span class="hours">08:00 - 12:00 | 15:30 - 20:00</span></div>
-          <div class="row"><span class="day">Miércoles</span><span class="hours">08:00 - 12:00</span></div>
+          <div class="row"><span class="day">Miércoles</span><span class="hours">08:00 - 12:00 | 19:00 - 20:00</span></div>
           <div class="row"><span class="day">Jueves</span><span class="hours">08:00 - 12:00 | 14:00 - 20:00</span></div>
           <div class="row"><span class="day">Viernes</span><span class="hours">08:00 - 12:00 | 14:00 - 16:00</span></div>
           <div class="row"><span class="day">Sábado</span><span class="hours">08:00 - 12:00</span></div>
@@ -1011,18 +1117,11 @@
           <a href="#horarios" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #8094B3; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Horarios</a>
           <a href="#contacto" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #8094B3; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Contacto</a>
         </div>
-        <!-- LEGAL column -->
-        <div style="display: flex; flex-direction: column; gap: 22px; min-width: 220px;">
-          <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; color: #D5E3FF; text-transform: uppercase; letter-spacing: 1.2px;">LEGAL</p>
-          <a href="#" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #8094B3; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Política de Privacidad</a>
-          <a href="#" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: #8094B3; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Términos del Servicio</a>
-        </div>
-      </div>
-    </div>
     <!-- Bottom bar (full width line) -->
     <div style="border-top: 1px solid rgba(195,198,209,0.2); padding-top: 24px;">
-      <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px;">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between;">
         <p style="font-family: 'DM Sans', sans-serif; font-size: 14px; color: #8094B3;">© 2026 Axis Clínica de Rehabilitación y Movimiento.</p>
+        <a href="https://www.linkedin.com/in/valentinamabianco" target="_blank" rel="noopener" style="font-family: 'DM Sans', sans-serif; font-size: 14px; color: #8094B3; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Website creado por VMBS</a>
       </div>
     </div>
   </footer>
@@ -1039,6 +1138,18 @@
       close.addEventListener('click', shut);
       overlay.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', shut); });
     })();
+
+    /* Testimonials carousel: arrows scroll the track by one card */
+    function scrollTestimonials(dir) {
+      var track = document.getElementById('testimonialTrack');
+      if (!track) return;
+      var card = track.querySelector('.testimonial-card');
+      var styles = getComputedStyle(track);
+      var gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      // Scroll by the actual rendered card width (3-up on desktop, full-width on mobile)
+      var step = card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
 
     /* Scroll reveal: fade + slide up sections as they enter the viewport */
     (function() {
